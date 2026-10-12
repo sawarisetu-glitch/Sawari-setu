@@ -1,0 +1,92 @@
+<!doctype html>
+<html lang="hi" class="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+    <title>सवारी सेतु (Sawari Setu)</title>
+    <meta name="description" content="Production-ready multi-service ride-hailing, logistics, and multi-talent AI assistant platform with live GPS maps, online payments, digital invoices, and admin fleet hub." />
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#FF8C00" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="सवारी सेतु" />
+    <link rel="icon" type="image/jpeg" href="/sawari_setu_logo.jpg" />
+    <link rel="apple-touch-icon" href="/sawari_setu_logo.jpg" />
+    <link rel="canonical" href="https://sawarisetu.com" />
+    <meta property="og:title" content="सवारी सेतु (Sawari Setu) | भारत का विश्वसनीय राइड व माल परिवहन प्लेटफॉर्म" />
+    <meta property="og:description" content="सफर आसान • साथ सबका! बाइक, ऑटो, कैब व माल ढुलाई (छोटा हाथी/ट्रक) तुरंत बुक करें। प्रयागराज, पूर्वांचल व पूरे भारत में उपलब्ध।" />
+    <meta property="og:url" content="https://sawarisetu.com" />
+    <meta property="og:image" content="/sawari_setu_logo.jpg" />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="सवारी सेतु (Sawari Setu) - sawarisetu.com" />
+    <meta name="twitter:description" content="सफर आसान • साथ सबका! बाइक, ऑटो, कैब व माल ढुलाई तुरंत बुक करें।" />
+    <meta name="twitter:image" content="/sawari_setu_logo.jpg" />
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "सवारी सेतु (Sawari Setu)",
+      "url": "https://sawarisetu.com",
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://sawarisetu.com/?search={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "Organization",
+      "name": "सवारी सेतु (Sawari Setu)",
+      "url": "https://sawarisetu.com",
+      "logo": "https://sawarisetu.com/sawari_setu_logo.jpg",
+      "contactPoint": {
+        "@type": "ContactPoint",
+        "telephone": "+91-9450985355",
+        "contactType": "customer service",
+        "areaServed": "IN",
+        "availableLanguage": ["Hindi", "English"]
+      },
+      "email": "sawarisetu@gmail.com"
+    }
+    </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" crossorigin="" />
+  </head>
+  <body class="bg-[#0d0d0e] text-zinc-100 antialiased selection:bg-[#FF8C00] selection:text-black">
+    <div id="root"></div>
+    <script>
+      // Prevent mobile double-tap zoom & gesture pinch-to-zoom
+      document.addEventListener('gesturestart', function (e) {
+        e.preventDefault();
+      });
+      document.addEventListener('gesturechange', function (e) {
+        e.preventDefault();
+      });
+      document.addEventListener('gestureend', function (e) {
+        e.preventDefault();
+      });
+      var lastTouchEnd = 0;
+      document.addEventListener('touchend', function (e) {
+        var now = Date.now();
+        if (now - lastTouchEnd <= 300) {
+          e.preventDefault();
+        }
+        lastTouchEnd = now;
+      }, { passive: false });
+
+      if ('serviceWorker' in navigator) {
+        window.addEventListener('load', () => {
+          navigator.serviceWorker.register('/sw.js').catch(() => {});
+        });
+      }
+    </script>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
+

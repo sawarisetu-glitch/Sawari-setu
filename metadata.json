@@ -1,0 +1,6 @@
+{
+  "name": "सवारी सेतु (Sawari Setu)",
+  "description": "Production-ready multi-service ride-hailing, logistics, and multi-talent AI assistant platform with live GPS maps, online payments, digital invoices, and admin fleet hub.",
+  "requestFramePermissions": ["geolocation"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

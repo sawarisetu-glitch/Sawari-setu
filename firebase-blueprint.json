@@ -1,0 +1,91 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "User profile records for passengers, drivers, and admins with verified identity",
+      "type": "object",
+      "properties": {
+        "userId": { "type": "string", "maxLength": 128 },
+        "name": { "type": "string", "maxLength": 100 },
+        "phone": { "type": "string", "maxLength": 15 },
+        "email": { "type": "string", "maxLength": 100 },
+        "role": { "type": "string", "enum": ["passenger", "driver", "admin", "fleet_owner"] },
+        "isVerified": { "type": "boolean" },
+        "createdAt": { "type": "string" }
+      },
+      "required": ["userId", "name", "phone", "role"]
+    },
+    "RideBooking": {
+      "title": "RideBooking",
+      "description": "Passenger trip booking record with 5-year statutory legal retention",
+      "type": "object",
+      "properties": {
+        "bookingId": { "type": "string", "maxLength": 128 },
+        "passengerId": { "type": "string", "maxLength": 128 },
+        "driverId": { "type": "string", "maxLength": 128 },
+        "mode": { "type": "string", "enum": ["share", "direct", "erickshaw", "auto", "bike", "minicar"] },
+        "pickup": { "type": "string", "maxLength": 250 },
+        "destination": { "type": "string", "maxLength": 250 },
+        "distanceKm": { "type": "number" },
+        "totalFare": { "type": "number" },
+        "status": { "type": "string", "enum": ["searching", "assigned", "in_progress", "completed", "cancelled"] },
+        "paymentStatus": { "type": "string", "enum": ["pending", "paid"] },
+        "createdAt": { "type": "string" },
+        "retentionYears": { "type": "number" }
+      },
+      "required": ["bookingId", "passengerId", "pickup", "destination", "totalFare", "status"]
+    },
+    "LogisticsBooking": {
+      "title": "LogisticsBooking",
+      "description": "Commercial freight consignment record with e-Way bill and transit insurance",
+      "type": "object",
+      "properties": {
+        "consignmentId": { "type": "string", "maxLength": 128 },
+        "senderId": { "type": "string", "maxLength": 128 },
+        "lrNumber": { "type": "string", "maxLength": 64 },
+        "ewayBillNumber": { "type": "string", "maxLength": 64 },
+        "vehicleType": { "type": "string" },
+        "goodsDescription": { "type": "string", "maxLength": 200 },
+        "goodsValue": { "type": "number" },
+        "totalAmount": { "type": "number" },
+        "transitInsuranceOpted": { "type": "boolean" },
+        "status": { "type": "string", "enum": ["assigned", "loading", "in_transit", "delivered", "cancelled"] },
+        "createdAt": { "type": "string" },
+        "retentionYears": { "type": "number" }
+      },
+      "required": ["consignmentId", "senderId", "lrNumber", "totalAmount", "status"]
+    },
+    "DriverKycDoc": {
+      "title": "DriverKycDoc",
+      "description": "Driver KYC verification documents including DL, RC, PAN and Commercial Insurance",
+      "type": "object",
+      "properties": {
+        "docId": { "type": "string", "maxLength": 128 },
+        "driverId": { "type": "string", "maxLength": 128 },
+        "docType": { "type": "string", "enum": ["Aadhaar", "PAN", "Driving Licence", "Vehicle RC", "Commercial Insurance", "Police Verification"] },
+        "docNumber": { "type": "string", "maxLength": 64 },
+        "status": { "type": "string", "enum": ["pending", "approved", "rejected"] },
+        "uploadedAt": { "type": "string" }
+      },
+      "required": ["docId", "driverId", "docType", "docNumber", "status"]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": "UserProfile",
+      "description": "User account documents"
+    },
+    "/rides/{rideId}": {
+      "schema": "RideBooking",
+      "description": "Passenger ride logs preserved for 3-5 years"
+    },
+    "/logistics/{consignmentId}": {
+      "schema": "LogisticsBooking",
+      "description": "Commercial goods consignment and freight tax invoices"
+    },
+    "/kyc_documents/{docId}": {
+      "schema": "DriverKycDoc",
+      "description": "Driver compliance verification documents and RTO records"
+    }
+  }
+}

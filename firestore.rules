@@ -1,0 +1,64 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Default Deny Catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(userId) {
+      return isSignedIn() && request.auth.uid == userId;
+    }
+
+    function isAdmin() {
+      return isSignedIn() && (
+        request.auth.token.email == 'sawarisetu@gmail.com' ||
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid))
+      );
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() > 0 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    // User Profiles
+    match /users/{userId} {
+      allow get: if isOwner(userId) || isAdmin();
+      allow list: if isAdmin();
+      allow create: if isOwner(userId) && isValidId(userId);
+      allow update: if (isOwner(userId) || isAdmin()) && isValidId(userId);
+      allow delete: if isAdmin();
+    }
+
+    // Ride Bookings (3-5 Years Statutory Audit Trail)
+    match /rides/{rideId} {
+      allow get: if isSignedIn() && (resource.data.passengerId == request.auth.uid || resource.data.driverId == request.auth.uid || isAdmin());
+      allow list: if isSignedIn() && (resource.data.passengerId == request.auth.uid || isAdmin());
+      allow create: if isSignedIn() && isValidId(rideId);
+      allow update: if isSignedIn() && (resource.data.passengerId == request.auth.uid || resource.data.driverId == request.auth.uid || isAdmin());
+      allow delete: if isAdmin();
+    }
+
+    // Logistics Consignments & e-Way Bill records
+    match /logistics/{consignmentId} {
+      allow get: if isSignedIn() && (resource.data.senderId == request.auth.uid || isAdmin());
+      allow list: if isSignedIn() && (resource.data.senderId == request.auth.uid || isAdmin());
+      allow create: if isSignedIn() && isValidId(consignmentId);
+      allow update: if (isSignedIn() && resource.data.senderId == request.auth.uid) || isAdmin();
+      allow delete: if isAdmin();
+    }
+
+    // Driver KYC Verification Papers
+    match /kyc_documents/{docId} {
+      allow get: if (isSignedIn() && resource.data.driverId == request.auth.uid) || isAdmin();
+      allow list: if isSignedIn();
+      allow create: if isSignedIn() && isValidId(docId);
+      allow update: if (isSignedIn() && (resource.data.driverId == request.auth.uid || isAdmin())) && isValidId(docId);
+      allow delete: if isAdmin();
+    }
+  }
+}
